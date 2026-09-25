@@ -231,15 +231,15 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="category">
-                        Category
+                    <label for="tag">
+                        Tag
                     </label>
 
                     <input
                         type="text"
-                        id="category"
-                        name="category"
-                        value="{{ old('category') }}"
+                        id="tag"
+                        name="tag"
+                        value="{{ old('tag') }}"
                         maxlength="100"
                         required
                         placeholder="e.g. Artificial Intelligence"

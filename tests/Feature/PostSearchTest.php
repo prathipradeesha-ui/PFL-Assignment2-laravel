@@ -9,7 +9,7 @@ test('search finds posts by title', function () {
     Post::create([
         'title' => 'AI Student Assistant',
         'author' => 'Prathi',
-        'category' => 'Artificial Intelligence',
+        'tag' => 'Artificial Intelligence',
         'content' => 'An AI-powered assistant for students.',
         'cover_image' => null,
     ]);
@@ -17,7 +17,7 @@ test('search finds posts by title', function () {
     Post::create([
         'title' => 'Smart Library Management System',
         'author' => 'Kavindu',
-        'category' => 'Web Development',
+        'tag' => 'Web Development',
         'content' => 'A system for managing library resources.',
         'cover_image' => null,
     ]);

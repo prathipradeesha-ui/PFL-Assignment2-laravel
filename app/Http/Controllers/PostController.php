@@ -10,29 +10,42 @@ class PostController extends Controller
     public function index(Request $request)
     {
         $search = trim($request->input('q', ''));
+        $selectedTag = $request->input('tag', '');
         $selectedSort = $request->input('sort', 'newest');
 
-        if ($selectedSort === 'oldest') {
-            $sortColumn = 'created_at';
-            $sortDirection = 'asc';
-        } elseif ($selectedSort === 'title') {
-            $sortColumn = 'title';
-            $sortDirection = 'asc';
-        } else {
-            $sortColumn = 'created_at';
-            $sortDirection = 'desc';
+        if (!in_array($selectedSort, ['newest', 'oldest', 'title'], true)) {
             $selectedSort = 'newest';
         }
 
-        $postsQuery = Post::orderBy($sortColumn, $sortDirection);
+        $tags = Post::query()
+            ->whereNotNull('tag')
+            ->where('tag', '!=', '')
+            ->select('tag')
+            ->distinct()
+            ->orderBy('tag')
+            ->pluck('tag');
+
+        $postsQuery = Post::query();
 
         if ($search !== '') {
             $postsQuery->where(function ($query) use ($search) {
                 $query->where('title', 'like', "%{$search}%")
                     ->orWhere('author', 'like', "%{$search}%")
-                    ->orWhere('category', 'like', "%{$search}%")
+                    ->orWhere('tag', 'like', "%{$search}%")
                     ->orWhere('content', 'like', "%{$search}%");
             });
+        }
+
+        if ($selectedTag !== '') {
+            $postsQuery->where('tag', $selectedTag);
+        }
+
+        if ($selectedSort === 'oldest') {
+            $postsQuery->orderBy('created_at', 'asc');
+        } elseif ($selectedSort === 'title') {
+            $postsQuery->orderBy('title', 'asc');
+        } else {
+            $postsQuery->orderBy('created_at', 'desc');
         }
 
         $posts = $postsQuery->take(3)->get();
@@ -40,7 +53,9 @@ class PostController extends Controller
         return view('posts.index', compact(
             'posts',
             'search',
-            'selectedSort'
+            'selectedTag',
+            'selectedSort',
+            'tags'
         ));
     }
 
@@ -54,7 +69,7 @@ class PostController extends Controller
         $validated = $request->validate([
             'title' => 'required|max:200',
             'author' => 'required|max:100',
-            'category' => 'required|max:100',
+            'tag' => 'required|max:100',
             'content' => 'required',
             'cover_image' => 'nullable|url',
         ]);
@@ -80,7 +95,7 @@ class PostController extends Controller
         $validated = $request->validate([
             'title' => 'required|max:200',
             'author' => 'required|max:100',
-            'category' => 'required|max:100',
+            'tag' => 'required|max:100',
             'content' => 'required',
             'cover_image' => 'nullable|url',
         ]);

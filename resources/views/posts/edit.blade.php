@@ -229,15 +229,15 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="category">
-                        Category
+                    <label for="tag">
+                        Tag
                     </label>
 
                     <input
                         type="text"
-                        id="category"
-                        name="category"
-                        value="{{ old('category', $post->category) }}"
+                        id="tag"
+                        name="tag"
+                        value="{{ old('tag', $post->tag) }}"
                         maxlength="100"
                         required
                     >

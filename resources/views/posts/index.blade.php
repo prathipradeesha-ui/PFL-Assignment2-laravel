@@ -74,9 +74,27 @@
                 type="text"
                 name="q"
                 value="{{ $search }}"
-                placeholder="Search projects, authors, categories..."
+                placeholder="Search projects, authors, tags..."
                 class="flex-1 border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
+
+            <select
+                name="tag"
+                class="border border-gray-300 rounded-lg px-4 py-3 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+                <option value="">
+                    All Tags
+                </option>
+
+                @foreach ($tags as $tag)
+                    <option
+                        value="{{ $tag }}"
+                        {{ $selectedTag === $tag ? 'selected' : '' }}
+                    >
+                        {{ $tag }}
+                    </option>
+                @endforeach
+            </select>
 
             <select
                 name="sort"
@@ -102,7 +120,7 @@
                 Search
             </button>
 
-            @if ($search || $selectedSort !== 'newest')
+            @if ($search || $selectedTag || $selectedSort !== 'newest')
                 <a
                     href="{{ route('posts.index') }}"
                     class="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg text-center font-medium hover:bg-gray-300 transition"
@@ -184,7 +202,7 @@
                     <div class="p-6">
 
                         <span class="inline-block bg-blue-100 text-blue-700 text-xs font-semibold px-3 py-1 rounded-full">
-                            {{ $post->category }}
+                            {{ $post->tag }}
                         </span>
 
                         <h3 class="text-xl font-bold mt-3 mb-2">

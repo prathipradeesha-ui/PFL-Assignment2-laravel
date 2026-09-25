@@ -16,7 +16,7 @@ test('a new post can be created', function () {
     $response = $this->post(route('posts.store'), [
         'title' => 'Campus Navigation System',
         'author' => 'Prathi',
-        'category' => 'Mobile Application',
+        'tag' => 'Mobile Application',
         'content' => 'A mobile application for navigating university facilities.',
         'cover_image' => null,
     ]);
@@ -28,7 +28,7 @@ test('a new post can be created', function () {
     $this->assertDatabaseHas('posts', [
         'title' => 'Campus Navigation System',
         'author' => 'Prathi',
-        'category' => 'Mobile Application',
+        'tag' => 'Mobile Application',
     ]);
 });
 
@@ -36,7 +36,7 @@ test('a post can be viewed', function () {
     $post = Post::create([
         'title' => 'Student Event Management System',
         'author' => 'Jason',
-        'category' => 'Web Development',
+        'tag' => 'Web Development',
         'content' => 'A system for managing university events.',
         'cover_image' => null,
     ]);
@@ -52,7 +52,7 @@ test('an existing post can be updated', function () {
     $post = Post::create([
         'title' => 'Smart Parking Assistant',
         'author' => 'Kavindu Perera',
-        'category' => 'Internet of Things',
+        'tag' => 'Internet of Things',
         'content' => 'Original content.',
         'cover_image' => null,
     ]);
@@ -60,7 +60,7 @@ test('an existing post can be updated', function () {
     $response = $this->put(route('posts.update', $post), [
         'title' => 'Smart Parking Assistant Updated',
         'author' => 'Kavindu Perera',
-        'category' => 'Internet of Things',
+        'tag' => 'Internet of Things',
         'content' => 'Updated content.',
         'cover_image' => null,
     ]);
@@ -80,7 +80,7 @@ test('delete confirmation page is accessible', function () {
     $post = Post::create([
         'title' => 'Campus Security System',
         'author' => 'Student A',
-        'category' => 'Security',
+        'tag' => 'Security',
         'content' => 'A campus security project.',
         'cover_image' => null,
     ]);
@@ -96,7 +96,7 @@ test('an existing post can be deleted', function () {
     $post = Post::create([
         'title' => 'Student Feedback System',
         'author' => 'Student B',
-        'category' => 'Web Development',
+        'tag' => 'Web Development',
         'content' => 'A feedback management system.',
         'cover_image' => null,
     ]);
