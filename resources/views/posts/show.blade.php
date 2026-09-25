@@ -3,182 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>{{ $post->title }} - ProjectHub</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            background-color: #f3f4f6;
-            color: #111827;
-        }
-
-        .container {
-            max-width: 850px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-
-        .back-link {
-            color: #2563eb;
-            text-decoration: none;
-        }
-
-        .back-link:hover {
-            text-decoration: underline;
-        }
-
-        .post-card {
-            background-color: white;
-            margin-top: 25px;
-            padding: 35px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        }
-
-        .category {
-            display: inline-block;
-            background-color: #dbeafe;
-            color: #1d4ed8;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        h1 {
-            font-size: 38px;
-            margin: 18px 0 10px;
-        }
-
-        .author {
-            color: #6b7280;
-            margin-bottom: 25px;
-        }
-
-        .cover-image {
-            width: 100%;
-            max-height: 400px;
-            object-fit: cover;
-            border-radius: 10px;
-            margin-bottom: 25px;
-        }
-
-        .content {
-            font-size: 17px;
-            line-height: 1.8;
-            white-space: pre-line;
-        }
-
-        .actions {
-            display: flex;
-            gap: 12px;
-            margin-top: 30px;
-            padding-top: 25px;
-            border-top: 1px solid #e5e7eb;
-        }
-
-        .edit-button {
-            background-color: #2563eb;
-            color: white;
-            padding: 11px 20px;
-            border-radius: 8px;
-            text-decoration: none;
-        }
-
-        .edit-button:hover {
-            background-color: #1d4ed8;
-        }
-
-        .delete-button {
-            background-color: #dc2626;
-            color: white;
-            padding: 11px 20px;
-            border-radius: 8px;
-            text-decoration: none;
-        }
-
-        .delete-button:hover {
-            background-color: #b91c1c;
-        }
-
-        @media (max-width: 600px) {
-            .post-card {
-                padding: 22px;
-            }
-
-            h1 {
-                font-size: 30px;
-            }
-
-            .actions {
-                flex-direction: column;
-            }
-
-            .edit-button,
-            .delete-button {
-                text-align: center;
-                width: 100%;
-            }
-        }
-    </style>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body>
+<body class="bg-gray-100 text-gray-900">
 
-<div class="container">
+<div class="max-w-5xl mx-auto px-6 py-10">
 
-    <a href="{{ route('posts.index') }}" class="back-link">
-        ← Back to ProjectHub
-    </a>
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
 
-    <article class="post-card">
+        <a
+            href="{{ route('posts.index') }}"
+            class="text-blue-600 font-medium hover:underline"
+        >
+            ← Back to ProjectHub
+        </a>
 
-        <span class="category">
-            {{ $post->category }}
-        </span>
+        <div class="flex items-center gap-3">
 
-        <h1>
-            {{ $post->title }}
-        </h1>
+            <div class="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center shadow">
+                <span class="text-sm font-bold">PH</span>
+            </div>
 
-        <p class="author">
-            By {{ $post->author }}
-            ·
-            {{ $post->created_at->format('d M Y, H:i') }}
-        </p>
+            <span class="font-bold text-lg">
+                ProjectHub
+            </span>
 
+        </div>
+
+    </div>
+
+    <!-- Post Card -->
+    <article class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+
+        <!-- Cover Image -->
         @if ($post->cover_image)
+
             <img
                 src="{{ $post->cover_image }}"
                 alt="{{ $post->title }}"
-                class="cover-image"
+                class="w-full h-72 md:h-96 object-cover"
             >
+
         @endif
 
-        <div class="content">
-            {{ $post->content }}
-        </div>
+        <div class="p-6 md:p-10">
 
-        <div class="actions">
+            <!-- Category -->
+            <span class="inline-block bg-blue-100 text-blue-700 text-sm font-semibold px-3 py-1 rounded-full">
+                {{ $post->category }}
+            </span>
 
-            <a
-                href="{{ route('posts.edit', $post) }}"
-                class="edit-button"
-            >
-                Edit Post
-            </a>
+            <!-- Title -->
+            <h1 class="text-3xl md:text-5xl font-bold tracking-tight mt-5">
+                {{ $post->title }}
+            </h1>
 
-            <a
-                href="{{ route('posts.delete', $post) }}"
-                class="delete-button"
-            >
-                Delete Post
-            </a>
+            <!-- Author and Date -->
+            <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mt-4 text-gray-500">
+
+                <span>
+                    By {{ $post->author }}
+                </span>
+
+                <span class="hidden sm:inline">
+                    •
+                </span>
+
+                <span>
+                    {{ $post->created_at->format('d M Y, H:i') }}
+                </span>
+
+            </div>
+
+            <!-- Content -->
+            <div class="mt-8 text-gray-700 leading-8 text-base md:text-lg whitespace-pre-line">
+                {{ $post->content }}
+            </div>
+
+            <!-- Actions -->
+            <div class="mt-10 pt-6 border-t border-gray-200">
+
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+
+                    <!-- Bookmark -->
+                    <button
+                        type="button"
+                        data-bookmark-button
+                        data-post-id="{{ $post->id }}"
+                        aria-pressed="false"
+                        class="border px-4 py-3 rounded-lg text-sm font-medium transition bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200"
+                    >
+                        ☆ Bookmark
+                    </button>
+
+                    <!-- Edit / Delete -->
+                    <div class="flex flex-col sm:flex-row gap-3">
+
+                        <a
+                            href="{{ route('posts.edit', $post) }}"
+                            class="inline-flex items-center justify-center bg-blue-600 text-white px-5 py-3 rounded-lg font-medium hover:bg-blue-700 transition"
+                        >
+                            Edit Post
+                        </a>
+
+                        <a
+                            href="{{ route('posts.delete', $post) }}"
+                            class="inline-flex items-center justify-center bg-red-600 text-white px-5 py-3 rounded-lg font-medium hover:bg-red-700 transition"
+                        >
+                            Delete Post
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
 
         </div>
 
