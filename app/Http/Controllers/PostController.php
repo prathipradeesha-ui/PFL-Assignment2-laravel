@@ -10,8 +10,21 @@ class PostController extends Controller
     public function index(Request $request)
     {
         $search = trim($request->input('q', ''));
+        $selectedSort = $request->input('sort', 'newest');
 
-        $postsQuery = Post::latest();
+        if ($selectedSort === 'oldest') {
+            $sortColumn = 'created_at';
+            $sortDirection = 'asc';
+        } elseif ($selectedSort === 'title') {
+            $sortColumn = 'title';
+            $sortDirection = 'asc';
+        } else {
+            $sortColumn = 'created_at';
+            $sortDirection = 'desc';
+            $selectedSort = 'newest';
+        }
+
+        $postsQuery = Post::orderBy($sortColumn, $sortDirection);
 
         if ($search !== '') {
             $postsQuery->where(function ($query) use ($search) {
@@ -24,7 +37,11 @@ class PostController extends Controller
 
         $posts = $postsQuery->take(3)->get();
 
-        return view('posts.index', compact('posts', 'search'));
+        return view('posts.index', compact(
+            'posts',
+            'search',
+            'selectedSort'
+        ));
     }
 
     public function create()
