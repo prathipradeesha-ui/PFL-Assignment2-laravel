@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>{{ $post->title }} - ProjectHub</title>
 
     <style>
@@ -99,10 +98,8 @@
             background-color: #dc2626;
             color: white;
             padding: 11px 20px;
-            border: none;
             border-radius: 8px;
-            cursor: pointer;
-            font-size: 15px;
+            text-decoration: none;
         }
 
         .delete-button:hover {
@@ -133,72 +130,61 @@
 
 <body>
 
-    <div class="container">
+<div class="container">
 
-        <a
-            href="{{ route('posts.index') }}"
-            class="back-link"
-        >
-            ← Back to ProjectHub
-        </a>
+    <a href="{{ route('posts.index') }}" class="back-link">
+        ← Back to ProjectHub
+    </a>
 
-        <article class="post-card">
+    <article class="post-card">
 
-            <span class="category">
-                {{ $post->category }}
-            </span>
+        <span class="category">
+            {{ $post->category }}
+        </span>
 
-            <h1>
-                {{ $post->title }}
-            </h1>
+        <h1>
+            {{ $post->title }}
+        </h1>
 
-            <p class="author">
-                By {{ $post->author }}
-                · {{ $post->created_at->format('d M Y, H:i') }}
-            </p>
+        <p class="author">
+            By {{ $post->author }}
+            ·
+            {{ $post->created_at->format('d M Y, H:i') }}
+        </p>
 
-            @if ($post->cover_image)
-                <img
-                    src="{{ $post->cover_image }}"
-                    alt="{{ $post->title }}"
-                    class="cover-image"
-                >
-            @endif
+        @if ($post->cover_image)
+            <img
+                src="{{ $post->cover_image }}"
+                alt="{{ $post->title }}"
+                class="cover-image"
+            >
+        @endif
 
-            <div class="content">
-                {{ $post->content }}
-            </div>
+        <div class="content">
+            {{ $post->content }}
+        </div>
 
-            <div class="actions">
+        <div class="actions">
 
-                <a
-                    href="{{ route('posts.edit', $post) }}"
-                    class="edit-button"
-                >
-                    Edit Post
-                </a>
+            <a
+                href="{{ route('posts.edit', $post) }}"
+                class="edit-button"
+            >
+                Edit Post
+            </a>
 
-                <form
-                    action="{{ route('posts.destroy', $post) }}"
-                    method="POST"
-                    onsubmit="return confirm('Are you sure you want to delete this post?');"
-                >
-                    @csrf
-                    @method('DELETE')
+            <a
+                href="{{ route('posts.delete', $post) }}"
+                class="delete-button"
+            >
+                Delete Post
+            </a>
 
-                    <button
-                        type="submit"
-                        class="delete-button"
-                    >
-                        Delete Post
-                    </button>
-                </form>
+        </div>
 
-            </div>
+    </article>
 
-        </article>
-
-    </div>
+</div>
 
 </body>
 </html>

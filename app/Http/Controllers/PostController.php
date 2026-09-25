@@ -61,6 +61,11 @@ class PostController extends Controller
             ->with('success', 'Post updated successfully.');
     }
 
+    public function delete(Post $post)
+    {
+        return view('posts.delete', compact('post'));
+    }
+
     public function destroy(Post $post)
     {
         $post->delete();
