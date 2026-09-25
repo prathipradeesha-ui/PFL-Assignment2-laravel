@@ -1,58 +1,230 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# ProjectHub – Laravel
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+ProjectHub is a simple final-year project blog developed for Software Engineering students. Students can create, view, edit, delete, and search project posts.
 
-## About Laravel
+This project is one of three framework implementations developed for the Programming Frameworks & Languages assessment. The same case-study requirements and additional Search feature are implemented across the selected frameworks.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Framework and Technologies
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+* Laravel 13.33.0
+* PHP 8.3.6
+* Blade
+* SQLite
+* Eloquent ORM
+* Pest / PHPUnit
+* Tailwind CSS / Vite
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Implemented Features
 
-## Learning Laravel
+### Core Blog Features
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+* Homepage displaying the latest three posts
+* Create a new post
+* View individual post details
+* Edit an existing post
+* Delete an existing post
+* Delete confirmation page
+* Persistent SQLite database
+* Optional cover image URL for posts
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Additional Feature – Search
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+Search is the common additional feature implemented for comparison across the three framework implementations.
 
-## Agentic Development
+Users can search posts by:
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+* Title
+* Author
+* Category
+* Content
 
-```bash
-composer require laravel/boost --dev
+Example:
 
-php artisan boost:install
+```text
+http://127.0.0.1:8000/?q=AI
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+The homepage displays matching search results and provides a Clear option to return to all posts.
 
-## Contributing
+## Post Data
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Each post contains:
 
-## Code of Conduct
+| Field       | Description                        |
+| ----------- | ---------------------------------- |
+| ID          | Unique post identifier             |
+| Title       | Project title                      |
+| Author      | Student/author name                |
+| Category    | Project category                   |
+| Content     | Project description                |
+| Cover Image | Optional public image URL          |
+| Created At  | Date and time the post was created |
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Database
 
-## Security Vulnerabilities
+The application uses SQLite for persistent data storage.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+The main database table is:
 
-## License
+```text
+posts
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+The `Post` Eloquent model is used to create, retrieve, update, and delete posts.
+
+## Project Structure
+
+```text
+PFL-Assignment2-laravel/
+│
+├── app/
+│   ├── Http/
+│   │   └── Controllers/
+│   │       └── PostController.php
+│   │
+│   └── Models/
+│       └── Post.php
+│
+├── database/
+│   ├── migrations/
+│   │   └── create_posts_table.php
+│   └── database.sqlite
+│
+├── resources/
+│   └── views/
+│       └── posts/
+│           ├── index.blade.php
+│           ├── create.blade.php
+│           ├── show.blade.php
+│           ├── edit.blade.php
+│           └── delete.blade.php
+│
+├── routes/
+│   └── web.php
+│
+├── tests/
+│   ├── Feature/
+│   │   ├── ExampleTest.php
+│   │   └── PostSearchTest.php
+│   └── Unit/
+│       └── ExampleTest.php
+│
+├── .env
+├── composer.json
+└── README.md
+```
+
+## Installation
+
+Clone the repository:
+
+```bash
+git clone https://github.com/prathipradeesha-ui/PFL-Assignment2-laravel.git
+```
+
+Move into the project directory:
+
+```bash
+cd PFL-Assignment2-laravel
+```
+
+Install PHP dependencies:
+
+```bash
+composer install
+```
+
+Create the environment file:
+
+```bash
+cp .env.example .env
+```
+
+Generate the application key:
+
+```bash
+php artisan key:generate
+```
+
+Run the database migrations:
+
+```bash
+php artisan migrate
+```
+
+Start the Laravel development server:
+
+```bash
+php artisan serve
+```
+
+Open:
+
+```text
+http://127.0.0.1:8000
+```
+
+## Testing
+
+The project uses Pest for automated testing.
+
+Run all tests with:
+
+```bash
+php artisan test
+```
+
+Current result:
+
+```text
+Tests: 3 passed (5 assertions)
+```
+
+The tests include:
+
+* Basic application response test
+* Database-aware feature test using `RefreshDatabase`
+* Search feature test verifying that matching posts are returned and unrelated posts are excluded
+
+The Search test creates test records in the test database and verifies the response returned for a search query.
+
+## Main Routes
+
+| Method | Route                  | Purpose             |
+| ------ | ---------------------- | ------------------- |
+| GET    | `/`                    | Homepage and search |
+| GET    | `/posts/create`        | Create post form    |
+| POST   | `/posts`               | Store new post      |
+| GET    | `/posts/{post}`        | View post           |
+| GET    | `/posts/{post}/edit`   | Edit post form      |
+| PUT    | `/posts/{post}`        | Update post         |
+| GET    | `/posts/{post}/delete` | Delete confirmation |
+| DELETE | `/posts/{post}`        | Delete post         |
+
+## Validation
+
+Post creation and updating validate:
+
+* Title is required and limited to 200 characters
+* Author is required and limited to 100 characters
+* Category is required and limited to 100 characters
+* Content is required
+* Cover image is optional but must be a valid URL when provided
+
+## Assessment Context
+
+This Laravel implementation forms part of a comparative investigation of three web development frameworks using the same Software Engineering student project blog case study.
+
+The prototype demonstrates:
+
+* Framework structure and conventions
+* CRUD implementation
+* Persistent data storage
+* Search functionality
+* Automated testing
+* Basic responsive user interface design
+
+The implementations can be compared using common requirements and the same additional Search feature.
+
+
+
