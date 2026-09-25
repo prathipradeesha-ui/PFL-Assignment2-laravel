@@ -7,13 +7,16 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
+
 <body class="bg-gray-100 text-gray-900">
 
     <div class="max-w-6xl mx-auto px-6 py-10">
 
+        <!-- Header -->
         <div class="flex items-center justify-between mb-8">
             <div>
                 <h1 class="text-4xl font-bold">ProjectHub</h1>
+
                 <p class="text-gray-600 mt-2">
                     Final-year project blog for Software Engineering students
                 </p>
@@ -27,20 +30,66 @@
             </a>
         </div>
 
+        <!-- Success Message -->
         @if (session('success'))
             <div class="bg-green-100 text-green-800 px-4 py-3 rounded-lg mb-6">
                 {{ session('success') }}
             </div>
         @endif
 
-        <h2 class="text-2xl font-semibold mb-5">
-            Latest Posts
-        </h2>
+        <!-- Search -->
+        <div class="bg-white rounded-xl shadow p-5 mb-8">
 
+            <form
+                action="{{ route('posts.index') }}"
+                method="GET"
+                class="flex flex-col md:flex-row gap-3"
+            >
+                <input
+                    type="text"
+                    name="q"
+                    value="{{ $search }}"
+                    placeholder="Search posts by title, author, category or content..."
+                    class="flex-1 border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+
+                <button
+                    type="submit"
+                    class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
+                >
+                    Search
+                </button>
+
+                @if ($search)
+                    <a
+                        href="{{ route('posts.index') }}"
+                        class="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg text-center hover:bg-gray-300"
+                    >
+                        Clear
+                    </a>
+                @endif
+            </form>
+
+        </div>
+
+        <!-- Posts Heading -->
+        @if ($search)
+            <h2 class="text-2xl font-semibold mb-5">
+                Search Results for "{{ $search }}"
+            </h2>
+        @else
+            <h2 class="text-2xl font-semibold mb-5">
+                Latest Posts
+            </h2>
+        @endif
+
+        <!-- Posts -->
         @if ($posts->count())
+
             <div class="grid md:grid-cols-3 gap-6">
 
-                @foreach ($posts->take(3) as $post)
+                @foreach ($posts as $post)
+
                     <article class="bg-white rounded-xl shadow overflow-hidden">
 
                         @if ($post->cover_image)
@@ -77,23 +126,47 @@
                             </a>
 
                         </div>
+
                     </article>
+
                 @endforeach
 
             </div>
-        @else
-            <div class="bg-white rounded-xl shadow p-8 text-center">
-                <p class="text-gray-600">
-                    No posts available yet.
-                </p>
 
-                <a
-                    href="{{ route('posts.create') }}"
-                    class="inline-block mt-4 bg-blue-600 text-white px-5 py-3 rounded-lg"
-                >
-                    Create the first post
-                </a>
+        @else
+
+            <div class="bg-white rounded-xl shadow p-8 text-center">
+
+                @if ($search)
+
+                    <p class="text-gray-600">
+                        No posts found matching "{{ $search }}".
+                    </p>
+
+                    <a
+                        href="{{ route('posts.index') }}"
+                        class="inline-block mt-4 bg-gray-200 text-gray-800 px-5 py-3 rounded-lg hover:bg-gray-300"
+                    >
+                        View All Posts
+                    </a>
+
+                @else
+
+                    <p class="text-gray-600">
+                        No posts available yet.
+                    </p>
+
+                    <a
+                        href="{{ route('posts.create') }}"
+                        class="inline-block mt-4 bg-blue-600 text-white px-5 py-3 rounded-lg"
+                    >
+                        Create the first post
+                    </a>
+
+                @endif
+
             </div>
+
         @endif
 
     </div>

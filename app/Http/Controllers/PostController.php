@@ -7,11 +7,24 @@ use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $posts = Post::latest()->take(3)->get();
+        $search = trim($request->input('q', ''));
 
-        return view('posts.index', compact('posts'));
+        $postsQuery = Post::latest();
+
+        if ($search !== '') {
+            $postsQuery->where(function ($query) use ($search) {
+                $query->where('title', 'like', "%{$search}%")
+                    ->orWhere('author', 'like', "%{$search}%")
+                    ->orWhere('category', 'like', "%{$search}%")
+                    ->orWhere('content', 'like', "%{$search}%");
+            });
+        }
+
+        $posts = $postsQuery->take(3)->get();
+
+        return view('posts.index', compact('posts', 'search'));
     }
 
     public function create()
