@@ -9,7 +9,7 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::latest()->get();
+        $posts = Post::latest()->take(3)->get();
 
         return view('posts.index', compact('posts'));
     }
