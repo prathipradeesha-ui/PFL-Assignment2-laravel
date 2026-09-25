@@ -50,7 +50,7 @@
         </div>
     @endif
 
-    <!-- Search -->
+    <!-- Search and Sort -->
     <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5 mb-8">
 
         <form
@@ -67,6 +67,23 @@
                 class="flex-1 border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
 
+            <select
+                name="sort"
+                class="border border-gray-300 rounded-lg px-4 py-3 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+                <option value="newest" {{ $selectedSort === 'newest' ? 'selected' : '' }}>
+                    Newest
+                </option>
+
+                <option value="oldest" {{ $selectedSort === 'oldest' ? 'selected' : '' }}>
+                    Oldest
+                </option>
+
+                <option value="title" {{ $selectedSort === 'title' ? 'selected' : '' }}>
+                    Title
+                </option>
+            </select>
+
             <button
                 type="submit"
                 class="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition"
@@ -74,7 +91,7 @@
                 Search
             </button>
 
-            @if ($search)
+            @if ($search || $selectedSort !== 'newest')
                 <a
                     href="{{ route('posts.index') }}"
                     class="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg text-center font-medium hover:bg-gray-300 transition"
@@ -171,13 +188,27 @@
                             {{ Str::limit($post->content, 120) }}
                         </p>
 
-                        <!-- Read More -->
-                        <a
-                            href="{{ route('posts.show', $post) }}"
-                            class="text-blue-600 font-semibold hover:underline"
-                        >
-                            Read More →
-                        </a>
+                        <!-- Actions -->
+                        <div class="flex items-center justify-between gap-3">
+
+                            <a
+                                href="{{ route('posts.show', $post) }}"
+                                class="text-blue-600 font-semibold hover:underline"
+                            >
+                                Read More →
+                            </a>
+
+                            <button
+                                type="button"
+                                data-bookmark-button
+                                data-post-id="{{ $post->id }}"
+                                aria-pressed="false"
+                                class="border px-3 py-2 rounded-lg text-sm font-medium transition bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200"
+                            >
+                                ☆ Bookmark
+                            </button>
+
+                        </div>
 
                     </div>
 
