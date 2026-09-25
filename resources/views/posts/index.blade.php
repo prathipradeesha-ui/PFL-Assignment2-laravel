@@ -13,11 +13,10 @@
 <div class="max-w-7xl mx-auto px-6 py-10">
 
     <!-- Header -->
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-8">
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8">
 
         <div class="flex items-center gap-4">
 
-            <!-- ProjectHub Icon -->
             <div class="w-14 h-14 bg-blue-600 text-white rounded-2xl flex items-center justify-center shadow-md">
                 <span class="text-xl font-bold">PH</span>
             </div>
@@ -34,12 +33,24 @@
 
         </div>
 
-        <a
-            href="{{ route('posts.create') }}"
-            class="inline-flex items-center justify-center bg-blue-600 text-white px-5 py-3 rounded-lg font-medium hover:bg-blue-700 transition"
-        >
-            + Create Post
-        </a>
+        <div class="flex flex-col sm:flex-row gap-3">
+
+            <button
+                type="button"
+                data-bookmark-view="all"
+                class="bg-yellow-100 text-yellow-800 border border-yellow-300 px-5 py-3 rounded-lg font-medium hover:bg-yellow-200 transition"
+            >
+                ★ Bookmarks (0)
+            </button>
+
+            <a
+                href="{{ route('posts.create') }}"
+                class="inline-flex items-center justify-center bg-blue-600 text-white px-5 py-3 rounded-lg font-medium hover:bg-blue-700 transition"
+            >
+                + Create Post
+            </a>
+
+        </div>
 
     </div>
 
@@ -147,7 +158,11 @@
 
             @foreach ($posts as $post)
 
-                <article class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition">
+                <article
+                    data-post-card
+                    data-post-id="{{ $post->id }}"
+                    class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition"
+                >
 
                     <!-- Cover Image -->
                     @if ($post->cover_image)
@@ -168,28 +183,23 @@
 
                     <div class="p-6">
 
-                        <!-- Category -->
                         <span class="inline-block bg-blue-100 text-blue-700 text-xs font-semibold px-3 py-1 rounded-full">
                             {{ $post->category }}
                         </span>
 
-                        <!-- Title -->
                         <h3 class="text-xl font-bold mt-3 mb-2">
                             {{ $post->title }}
                         </h3>
 
-                        <!-- Author -->
                         <p class="text-gray-500 text-sm mb-3">
                             By {{ $post->author }}
                         </p>
 
-                        <!-- Content Preview -->
                         <p class="text-gray-600 text-sm leading-6 mb-5">
                             {{ Str::limit($post->content, 120) }}
                         </p>
 
-                        <!-- Actions -->
-                        <div class="flex items-center justify-between gap-3">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
 
                             <a
                                 href="{{ route('posts.show', $post) }}"
@@ -218,9 +228,22 @@
 
         </div>
 
+        <!-- No Bookmarked Posts -->
+        <div
+            data-bookmark-empty
+            class="hidden bg-white rounded-2xl shadow-sm border border-gray-200 p-10 text-center mt-6"
+        >
+            <h3 class="text-xl font-semibold mb-2">
+                No bookmarked posts
+            </h3>
+
+            <p class="text-gray-600">
+                Bookmark a post to see it here.
+            </p>
+        </div>
+
     @else
 
-        <!-- No Posts -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-10 text-center">
 
             @if ($search)

@@ -30,6 +30,7 @@ function saveBookmarks(bookmarks) {
 
 function updateBookmarkButton(button, isBookmarked) {
     button.textContent = isBookmarked ? "★ Bookmarked" : "☆ Bookmark";
+
     button.setAttribute(
         "aria-pressed",
         isBookmarked ? "true" : "false"
@@ -44,14 +45,71 @@ function updateBookmarkButton(button, isBookmarked) {
     button.classList.toggle("border-gray-300", !isBookmarked);
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+function updateBookmarkCount() {
+    const countElement = document.querySelector(
+        "[data-bookmark-count]"
+    );
+
+    if (!countElement) {
+        return;
+    }
+
+    countElement.textContent = getBookmarks().length;
+}
+
+function updateBookmarkView() {
+    const viewButton = document.querySelector(
+        "[data-bookmark-view]"
+    );
+
+    const postCards = document.querySelectorAll(
+        "[data-post-card]"
+    );
+
+    const emptyMessage = document.querySelector(
+        "[data-bookmark-empty]"
+    );
+
+    if (!viewButton || !postCards.length) {
+        return;
+    }
+
+    const showingBookmarks =
+        viewButton.getAttribute("data-bookmark-view") === "bookmarks";
+
+    const bookmarks = getBookmarks();
+
+    let visibleCount = 0;
+
+    postCards.forEach((card) => {
+        const postId = String(card.dataset.postId);
+
+        const shouldShow =
+            !showingBookmarks || bookmarks.includes(postId);
+
+        card.classList.toggle("hidden", !shouldShow);
+
+        if (shouldShow) {
+            visibleCount += 1;
+        }
+    });
+
+    if (emptyMessage) {
+        emptyMessage.classList.toggle(
+            "hidden",
+            !showingBookmarks || visibleCount !== 0
+        );
+    }
+
+    viewButton.textContent = showingBookmarks
+        ? "← All Posts"
+        : `★ Bookmarks (${bookmarks.length})`;
+}
+
+function setupBookmarkButtons() {
     const bookmarkButtons = document.querySelectorAll(
         "[data-bookmark-button]"
     );
-
-    if (!bookmarkButtons.length) {
-        return;
-    }
 
     let bookmarks = getBookmarks();
 
@@ -80,6 +138,41 @@ document.addEventListener("DOMContentLoaded", () => {
                 button,
                 bookmarks.includes(postId)
             );
+
+            updateBookmarkCount();
+            updateBookmarkView();
         });
     });
+}
+
+function setupBookmarkView() {
+    const viewButton = document.querySelector(
+        "[data-bookmark-view]"
+    );
+
+    if (!viewButton) {
+        return;
+    }
+
+    viewButton.addEventListener("click", () => {
+        const currentView =
+            viewButton.getAttribute("data-bookmark-view");
+
+        viewButton.setAttribute(
+            "data-bookmark-view",
+            currentView === "bookmarks"
+                ? "all"
+                : "bookmarks"
+        );
+
+        updateBookmarkView();
+    });
+
+    updateBookmarkView();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    setupBookmarkButtons();
+    setupBookmarkView();
+    updateBookmarkCount();
 });
