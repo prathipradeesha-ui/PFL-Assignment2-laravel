@@ -17,16 +17,20 @@ class PostController extends Controller
             $selectedSort = 'newest';
         }
 
+        // Get available tags
         $tags = Post::query()
             ->whereNotNull('tag')
             ->where('tag', '!=', '')
             ->select('tag')
             ->distinct()
             ->orderBy('tag')
-            ->pluck('tag');
+            ->get()
+            ->pluck('tag')
+            ->values();
 
         $postsQuery = Post::query();
 
+        // Search
         if ($search !== '') {
             $postsQuery->where(function ($query) use ($search) {
                 $query->where('title', 'like', "%{$search}%")
@@ -36,10 +40,12 @@ class PostController extends Controller
             });
         }
 
+        // Tag filter
         if ($selectedTag !== '') {
             $postsQuery->where('tag', $selectedTag);
         }
 
+        // Sorting
         if ($selectedSort === 'oldest') {
             $postsQuery->orderBy('created_at', 'asc');
         } elseif ($selectedSort === 'title') {
@@ -48,14 +54,37 @@ class PostController extends Controller
             $postsQuery->orderBy('created_at', 'desc');
         }
 
-        $posts = $postsQuery->take(3)->get();
+        /*
+         * Homepage:
+         * - No search
+         * - No tag filter
+         * - Show only 3 posts
+         *
+         * Because sorting is applied before take(3):
+         * Newest  -> newest 3
+         * Oldest  -> oldest 3
+         * Title   -> first 3 alphabetically
+         *
+         * When search or tag filtering is active:
+         * show all matching posts.
+         */
+        $showLatestThree =
+            $search === '' &&
+            $selectedTag === '';
+
+        if ($showLatestThree) {
+            $posts = $postsQuery->take(3)->get();
+        } else {
+            $posts = $postsQuery->get();
+        }
 
         return view('posts.index', compact(
             'posts',
             'search',
             'selectedTag',
             'selectedSort',
-            'tags'
+            'tags',
+            'showLatestThree'
         ));
     }
 
